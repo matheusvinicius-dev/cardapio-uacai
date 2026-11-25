@@ -1,0 +1,17 @@
+{
+  "name": "cardapio-uacai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Cardápio digital do UAÇAÍ: pedido pela mesa e área da loja em tempo real.",
+  "main": "server.js",
+  "engines": { "node": ">=22.5" },
+  "scripts": {
+    "start": "node server.js",
+    "criar-usuario": "node scripts/criar-usuario.js",
+    "gerar-qr": "node scripts/gerar-qr.js",
+    "test": "node test/api.test.js"
+  },
+  "dependencies": {
+    "qrcode": "^1.5.4"
+  }
+}

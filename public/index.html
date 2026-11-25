@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="UAÇAÍ">
+<meta name="theme-color" content="#fcfdfc">
+<!-- Fase 7: Content-Security-Policy e os outros cabeçalhos vêm do server.js, não de <meta>:
+     um lugar só evita que as duas listas saiam do passo. -->
+<title>Carta digital de UAÇAÍ</title>
+<meta name="description" content="Carta de UAÇAÍ, comida saludable: açaí, combos de 5 platos, tapiocas, platos caseros y postres. Armá tu pedido desde la mesa y la recepción lo recibe al instante.">
+<link rel="icon" href="img/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Inter:wght@400;600;700&family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+<div id="device"><div id="screen">
+<div class="island"></div>
+<div class="statusbar"><span id="clock">9:41</span><span class="ic">
+  <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor" aria-hidden="true"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+  <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor" aria-hidden="true"><path d="M8 2.5c2.3 0 4.4.9 6 2.4l1.2-1.3A10.3 10.3 0 0 0 8 .7 10.3 10.3 0 0 0 .8 3.6L2 4.9a8.6 8.6 0 0 1 6-2.4Zm0 3.6c1.300 0 2.5.5 3.4 1.3l1.2-1.3A6.6 6.6 0 0 0 8 4.3a6.6 6.6 0 0 0-4.6 1.8l1.2 1.3c.9-.8 2.1-1.3 3.4-1.3Zm0 3.5-2.2 2.3L8 12.2l2.2-2.3A3 3 0 0 0 8 9.6Z"/></svg>
+  <svg width="27" height="13" viewBox="0 0 27 13" fill="none" aria-hidden="true"><rect x=".5" y=".5" width="23" height="12" rx="3.5" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="18" height="9" rx="2" fill="currentColor"/><path d="M25 4.5v4a2 2 0 0 0 0-4Z" fill="currentColor" opacity=".5"/></svg>
+</span></div>
+<div class="sb-bg"></div>
+<div id="app">
+<div class="wrap">
+  <a class="skip" href="#menu" data-i18n="skip"></a>
+  <div class="hero-out">
+  <header class="hero">
+    <span class="leaf" aria-hidden="true"></span>
+    <div class="topbar">
+      <div class="tb-l">
+        <img class="logo" src="img/logo.png" alt="UAÇAÍ" width="58" height="58" fetchpriority="high">
+        <button type="button" class="mesa-chip" id="mesaChip" hidden></button>
+      </div>
+      <div class="tb-r">
+        <div class="lang" id="lang" role="group" data-i18n-aria="lang"></div>
+        <button type="button" class="dots" id="dots" data-i18n-aria="more" aria-haspopup="menu" aria-expanded="false" aria-controls="menuPop"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg></button>
+      </div>
+    </div>
+    <p class="eyebrow" data-i18n="eyebrow"></p>
+    <h1 translate="no"><span class="u">U</span>AÇAÍ</h1>
+    <p class="sub"><b data-i18n="sub1"></b><span data-i18n="sub2"></span></p>
+    <p class="lede" data-i18n="lede"></p>
+    <div class="pills">
+      <span class="pill" data-i18n="p1"></span>
+      <span class="pill" data-i18n="p2"></span>
+      <span class="pill" data-i18n="p3"></span>
+    </div>
+  </header>
+  </div>
+
+  <div class="sticky">
+    <label class="search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" name="q" type="search" data-i18n-ph="search" data-i18n-aria="search" autocomplete="off">
+    </label>
+    <nav class="chips" id="chips" data-i18n-aria="cats"></nav>
+  </div>
+
+  <main id="menu" tabindex="-1"></main>
+  <p class="empty" id="empty" role="status" data-i18n="empty"></p>
+
+  <footer>
+    <span data-i18n="f2"></span><br>
+    <span class="brand" translate="no">U<i>AÇAÍ</i></span>
+  </footer>
+</div>
+</div>
+
+<!-- barra do pedido: aparece quando há algo no pedido ou pedidos em andamento -->
+<div class="bar" id="bar" hidden>
+  <button type="button" id="openBag"><span class="c" id="barCount">0</span><span class="bl" id="barLbl"></span><span class="tot" id="barTotal"></span></button>
+</div>
+
+<!-- painel do pedido (Sheet) -->
+<div class="overlay" id="overlay" inert>
+  <section class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+    <div class="grab" id="grab" aria-hidden="true"></div>
+    <div id="cartView">
+      <div class="sh"><h2 id="sheetTitle" data-i18n="order"></h2><button type="button" class="x" id="closeBag" data-i18n-aria="close">×</button></div>
+      <div id="lines"></div>
+      <div class="mesa-row"><span><span data-i18n="mesa"></span> <b id="sheetMesa"></b></span><button type="button" class="link" id="changeMesa" data-i18n="change"></button></div>
+      <p class="alerta" id="mesaErr" role="alert" hidden><span class="ai" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4.5M12 16h.01"/></svg></span><span data-i18n="wrongMesa"></span></p>
+      <label class="lbl" for="obs" data-i18n="notesL"></label>
+      <textarea class="field" id="obs" name="obs" maxlength="200" rows="2" autocomplete="off" data-i18n-ph="notes"></textarea>
+      <div class="sum"><span data-i18n="total"></span><b id="sheetTotal"></b></div>
+      <button type="button" class="primary" id="send" data-i18n="send"></button>
+      <button type="button" class="ghost" id="clear" data-i18n="clear"></button>
+      <p class="msg" id="msg" role="status"></p>
+    </div>
+    <div id="statusView" hidden>
+      <div class="sh"><h2 id="statusTitle" data-i18n="my"></h2><button type="button" class="x" id="closeBag2" data-i18n-aria="close">×</button></div>
+      <div class="sent" id="sentHead" hidden><span class="ok" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><div><b data-i18n="sentT"></b><span data-i18n="sentS"></span></div></div>
+      <div id="myList"></div>
+      <button type="button" class="pay" id="payBtn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span data-i18n="pay"></span></button>
+      <p class="msg" id="payMsg" role="status"></p>
+      <button type="button" class="ghost" id="contBtn" data-i18n="cont"></button>
+    </div>
+  </section>
+</div>
+
+<!-- visualizador de fotos -->
+<div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-labelledby="vName" aria-describedby="vDesc" inert>
+  <button class="vx" id="vClose" data-i18n-aria="close">×</button>
+  <img id="vImg" src="img/V9.jpg" alt="" width="600" height="600" decoding="async">
+  <div class="vinfo"><h2 id="vName"></h2><p id="vDesc"></p>
+    <div class="vrow"><p class="vg" id="vG"></p><button type="button" class="vadd" id="vAdd"></button></div>
+    <div class="vnav"><button id="vPrev" data-i18n-aria="prev"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button><button id="vNext" data-i18n-aria="next"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></div>
+  </div>
+</div>
+
+<!-- menu dos três pontinhos -->
+<div class="menu-pop" id="menuPop" role="menu" aria-labelledby="dots" hidden>
+  <button type="button" role="menuitem" id="goLoja"><span class="ic" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span><span class="tx"><b data-i18n="area"></b><small data-i18n="areaS"></small></span></button>
+</div>
+
+<!-- escolha de mesa -->
+<div class="modal" id="pick" role="dialog" aria-modal="true" aria-labelledby="pickT" inert>
+  <div class="mbox">
+    <h2 id="pickT" data-i18n="pickT"></h2>
+    <p data-i18n="pickS"></p>
+    <div class="pick-grid" id="pickGrid" role="group" aria-labelledby="pickT"></div>
+    <button type="button" class="ghost" id="pickClose" data-i18n="cancel"></button>
+  </div>
+</div>
+
+<!-- entrada da área da loja -->
+<div class="modal" id="login" role="dialog" aria-modal="true" aria-labelledby="loginT" inert>
+  <form class="mbox" id="loginForm" novalidate>
+    <span class="lock" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>
+    <h2 id="loginT" data-i18n="area"></h2>
+    <label class="lbl" for="em" data-i18n="email"></label>
+    <input class="field" id="em" name="email" type="email" autocomplete="username" inputmode="email" spellcheck="false" placeholder="loja@uacai.com" aria-describedby="pwErr" required>
+    <label class="lbl" for="pw" data-i18n="pass"></label>
+    <input class="field" id="pw" name="senha" type="password" autocomplete="current-password" aria-describedby="pwErr" required>
+    <p class="err" id="pwErr" role="alert"></p>
+    <button class="primary" type="submit" id="loginBtn" data-i18n="enter"></button>
+    <button class="ghost" type="button" id="pwCancel" data-i18n="cancel"></button>
+  </form>
+</div>
+
+<!-- "Cairia bem um açaí agora?" · aparece uma vez por pedido, com prato salgado e sem açaí -->
+<div class="modal" id="sugAcai" role="dialog" aria-modal="true" aria-labelledby="acaiT" aria-describedby="acaiS" inert>
+  <div class="mbox acai-box">
+    <h2 id="acaiT" data-i18n="acaiT"></h2>
+    <p id="acaiS" data-i18n="acaiS"></p>
+    <div class="acai-grid" id="acaiGrid"></div>
+    <button type="button" class="primary" id="acaiSend" data-i18n="acaiYes"></button>
+    <button type="button" class="ghost" id="acaiNo" data-i18n="acaiNo"></button>
+  </div>
+</div>
+
+<div class="home"></div>
+</div></div>
+<p class="hint" data-i18n="hint"></p>
+
+<!-- ÁREA DA LOJA · computador da recepção -->
+<div id="loja" hidden>
+  <header class="lh">
+    <div class="lh-in">
+      <div class="lh-b"><img src="img/logo.png" alt="UAÇAÍ" width="44" height="44"><div><h1 id="lojaTop" tabindex="-1">Área da loja</h1><p>Conectado como <span id="lojaEmail"></span></p></div></div>
+      <div class="lh-s">
+        <span class="chipx org" id="stCall" hidden><span id="stCallN">0</span> querem pagar</span>
+        <span class="chipx"><span id="stNovo">0</span> novos</span>
+        <span class="chipx"><span id="stPrep">0</span> em preparo</span>
+        <span class="chipx"><span id="stPronto">0</span> prontos</span>
+        <span class="chipx"><span id="stOcup">0</span>/11 mesas ocupadas</span>
+        <span class="chipx">Em aberto <span id="stAberto">Gs. 0</span></span>
+        <span class="live" id="live"><i aria-hidden="true"></i><span id="liveTx">Ao vivo</span></span>
+        <button type="button" class="out" id="lojaOut">Sair</button>
+      </div>
+    </div>
+  </header>
+  <main class="lm">
+    <section class="fat" aria-labelledby="fatT">
+      <div class="fat-m">
+        <h2 id="fatT">Faturamento do dia</h2>
+        <b id="fatTotal">Gs. 0</b>
+      </div>
+      <dl class="fat-s">
+        <div><dt>Contas fechadas</dt><dd id="fatContas">0</dd></div>
+        <div><dt>Ticket médio</dt><dd id="fatTicket">Gs. 0</dd></div>
+      </dl>
+    </section>
+
+    <div id="calls" role="alert" aria-label="Mesas chamando para pagar"></div>
+
+    <section aria-labelledby="mt">
+      <div class="mh">
+        <h2 id="mt">Mesas</h2>
+        <p>Clique numa mesa para ver a conta dela</p>
+        <ul class="leg">
+          <li><i class="k-novo" aria-hidden="true"></i>Pedido novo</li>
+          <li><i class="k-preparo" aria-hidden="true"></i>Em preparo</li>
+          <li><i class="k-pronto" aria-hidden="true"></i>Pronto</li>
+          <li><i class="k-chama" aria-hidden="true"></i>Quer pagar</li>
+          <li><i class="k-livre" aria-hidden="true"></i>Livre</li>
+        </ul>
+      </div>
+      <div id="mesas"></div>
+    </section>
+
+    <div id="conta" hidden></div>
+
+    <section aria-labelledby="pedT"><h2 id="pedT">Pedidos</h2><div id="kanban"></div></section>
+  </main>
+</div>
+
+<!-- extrato da conta · a impressão deixa só o #eprint, em cupom de 80 mm -->
+<div class="modal lmodal" id="extrato" role="dialog" aria-modal="true" aria-labelledby="exT" aria-describedby="exAb" inert>
+  <div class="ebox">
+    <div class="eprint" id="eprint">
+      <div class="ehead">
+        <img src="img/logo.png" alt="" width="44" height="44">
+        <div><b translate="no">UAÇAÍ</b><span id="exT">Extrato da conta</span><span id="exAb"></span></div>
+      </div>
+      <table class="etab">
+        <caption class="sr">Itens da conta, do pedido mais antigo para o mais novo</caption>
+        <thead><tr><th scope="col">Hora</th><th scope="col">Qtd</th><th scope="col">Item</th><th scope="col" class="num">Unit.</th><th scope="col" class="num">Total</th></tr></thead>
+        <tbody id="exBody"></tbody>
+        <tfoot><tr><th scope="row" colspan="4">Total geral</th><td id="exTotal">Gs. 0</td></tr></tfoot>
+      </table>
+      <p class="eobs" id="exObs" hidden></p>
+    </div>
+    <div class="ebtns">
+      <button type="button" class="b-out" id="exPrint">Imprimir</button>
+      <button type="button" class="b-pur" id="exFechar">Fechar conta</button>
+      <button type="button" class="b-out" id="exVoltar">Voltar</button>
+    </div>
+  </div>
+</div>
+
+<script src="catalogo.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
