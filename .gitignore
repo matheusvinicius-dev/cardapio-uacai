@@ -1,0 +1,9 @@
+node_modules/
+data/
+qr/
+qa/
+.env
+.playwright-mcp/
+*.db
+*.db-shm
+*.db-wal
